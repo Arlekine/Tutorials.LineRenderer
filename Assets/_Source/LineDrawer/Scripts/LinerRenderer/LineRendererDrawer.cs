@@ -20,54 +20,20 @@ namespace LineRendererTutorial.Drawer
 
         public Renderer StartDrawing(Vector2 point)
         {
-            _currentRenderer = _factory.Create();
-            _currentRenderer.useWorldSpace = false;
-            _renderers.Add(_currentRenderer);
-
-            _currentRenderer.positionCount = 1;
-            _currentRenderer.SetPosition(0, _currentRenderer.transform.InverseTransformPoint(point));
-
             return _currentRenderer;
         }
 
         public void UpdateDrawing(Vector2 point)
-        {
-            if (_currentRenderer == null)
-                throw new Exception("Drawer isn't draw right now");
-
-            if (Vector3.Distance(_currentRenderer.GetPosition(_currentRenderer.positionCount - 1), point) > _minDrawingDistance)
-            {
-                _currentRenderer.positionCount++;
-                _currentRenderer.SetPosition(_currentRenderer.positionCount - 1, _currentRenderer.transform.InverseTransformPoint(point));
-            }
-        }
+        {}
 
         public void FinishDrawing(Vector2 point)
-        {
-            _currentRenderer.positionCount++;
-            _currentRenderer.SetPosition(_currentRenderer.positionCount - 1, _currentRenderer.transform.InverseTransformPoint(point));
-            _currentRenderer = null;
-        }
+        {}
 
         public void ForceStopCurrent()
-        {
-            if (_currentRenderer == false)
-                return;
-
-            _renderers.Remove(_currentRenderer);
-            _factory.Destroy(_currentRenderer);
-            _currentRenderer = null;
-        }
+        {}
 
         public void Clear()
-        {
-            _renderers.ForEach(x =>
-            {
-                if (x != null)
-                    _factory.Destroy(x);
-            });
-            _renderers.Clear();
-        }
+        {}
 
         public void Dispose()
         {

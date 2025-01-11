@@ -12,12 +12,5 @@ public class MeshBaking : MonoBehaviour
     {
         var bakedGameObject = new GameObject("Baked Line");
         var mesh = new Mesh();
-
-        _lineRenderer.Simplify(0.1f);
-        _lineRenderer.BakeMesh(mesh, true);
-
-        bakedGameObject.AddComponent<MeshFilter>().mesh = mesh;
-        bakedGameObject.AddComponent<MeshRenderer>().material = _material;
-        bakedGameObject.AddComponent<MeshCollider>().sharedMesh = mesh;
     }
 }
