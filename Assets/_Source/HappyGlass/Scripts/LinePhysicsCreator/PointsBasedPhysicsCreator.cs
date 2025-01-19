@@ -1,19 +1,19 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace LineRendererTutorial.HappyGlass
 {
-    public class EdgeLinePhysicsCreator : ILinePhysicsCreator, IDisposable
+    public abstract class PointsBasedPhysicsCreator : ILinePhysicsCreator, IDisposable
     {
-        private float _edgeWidth;
+        protected float _edgeWidth;
         private float _minDrawingDistance;
 
         private GameObject _targetObject;
         private List<Vector3> _currentPoints = new List<Vector3>();
 
-        public EdgeLinePhysicsCreator(float minDrawingDistance, float edgeWidth)
+        public PointsBasedPhysicsCreator(float minDrawingDistance, float edgeWidth)
         {
             _minDrawingDistance = minDrawingDistance;
             _edgeWidth = edgeWidth;
@@ -41,6 +41,8 @@ namespace LineRendererTutorial.HappyGlass
             if (_targetObject == null)
                 throw new Exception("Physics creator isn't draw right now");
 
+            _currentPoints.Add(point);
+
             Rigidbody2D rigidbody = _targetObject.GetComponent<Rigidbody2D>();
             if (rigidbody == false)
             {
@@ -48,15 +50,12 @@ namespace LineRendererTutorial.HappyGlass
                 rigidbody.useAutoMass = true;
             }
 
-            var edgeCollider = _targetObject.AddComponent<EdgeCollider2D>();
-            edgeCollider.edgeRadius = _edgeWidth;
-
             var localPoints = new List<Vector2>();
 
             foreach (var currentPoint in _currentPoints)
                 localPoints.Add(_targetObject.transform.InverseTransformPoint(currentPoint));
 
-            edgeCollider.SetPoints(localPoints);
+            CreateCollider(localPoints, rigidbody);
             rigidbody.centerOfMass = localPoints[localPoints.Count / 2];
             ForceStopCurrent();
 
@@ -76,5 +75,7 @@ namespace LineRendererTutorial.HappyGlass
             if (_targetObject != false)
                 ForceStopCurrent();
         }
+
+        protected abstract void CreateCollider(List<Vector2> localPoints, Rigidbody2D rigidbody);
     }
 }

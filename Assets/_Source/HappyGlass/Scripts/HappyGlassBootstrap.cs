@@ -37,7 +37,7 @@ namespace LineRendererTutorial.HappyGlass
             var lineRendererFactory = new LineRendererFactory(_lineRendererPrefab, _lineRenderersParent);
             var lineDrawer = new LineRendererDrawer(lineRendererFactory, _drawingMinDistance);
             var lineInput = new MouseWorldPointsLineInput(_camera, coroutineHandler, _inputDepth);
-            var physicsCreator = new EdgeLinePhysicsCreator(_drawingMinDistance, _lineRendererPrefab.startWidth * _radiusMultiplayer);
+            var physicsCreator = new CapsuleColliderPhysicsCreator(_drawingMinDistance, _lineRendererPrefab.startWidth);
 
             var lineCreationController = new PhysicsLineCreationController(physicsCreator, lineDrawer, lineInput, _stopDrawingLayer);
             var gameplayController = new GameplayController(_uiMediator, _ball, _finalTrigger, lineCreationController, _gameplayConfig);
